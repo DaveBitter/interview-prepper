@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,7 +30,7 @@ interface Question {
   suggestedAnswer?: string;
 }
 
-export default function PracticePage() {
+function PracticeContent() {
   const searchParams = useSearchParams();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -359,5 +359,24 @@ export default function PracticePage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function PracticePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/10 flex items-center justify-center">
+          <div className="text-center">
+            <BrainCircuit className="h-12 w-12 text-primary mx-auto mb-4 animate-pulse" />
+            <p className="text-lg text-muted-foreground">
+              Loading your interview practice...
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <PracticeContent />
+    </Suspense>
   );
 }
